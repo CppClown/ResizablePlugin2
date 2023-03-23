@@ -8,14 +8,32 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+using namespace juce;
+
 
 //==============================================================================
 ResizablePluginAudioProcessorEditor::ResizablePluginAudioProcessorEditor (ResizablePluginAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    //-------- Set size and limits.
+   
+    const auto minWidth = 500.f;
+    const auto minHeight = 375.f;
+    const auto maxWidth = 1240.f;
+    const auto maxHeight = 930.f;
+    
+    setResizable(false, true);
+    
+    if (auto componentBoundsConstrainer = getConstrainer())
+    {
+        componentBoundsConstrainer->setSizeLimits(
+            roundToInt(minWidth), roundToInt(minHeight),
+            roundToInt(maxWidth), roundToInt(maxHeight));
+
+        componentBoundsConstrainer->setFixedAspectRatio(4.f / 3.f);
+    }
+    
+    setSize(minWidth, minHeight);
 }
 
 ResizablePluginAudioProcessorEditor::~ResizablePluginAudioProcessorEditor()
