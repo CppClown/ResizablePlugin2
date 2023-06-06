@@ -29,5 +29,9 @@ private:
     // access the processor object that created it.
     ResizablePluginAudioProcessor& audioProcessor;
 
+    // Counts how often the resized() was called.
+    int mNumberOfCallsToResized { 0 };
+    juce::TextEditor mTextEditor;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ResizablePluginAudioProcessorEditor)
 };

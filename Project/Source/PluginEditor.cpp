@@ -15,6 +15,13 @@ using namespace juce;
 ResizablePluginAudioProcessorEditor::ResizablePluginAudioProcessorEditor (ResizablePluginAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
+    //-------- Text editor.
+
+    mTextEditor.setReadOnly(true);
+    mTextEditor.setFont(Font("Consolas", 16.f, Font::FontStyleFlags::plain));
+    mTextEditor.setMultiLine(true);
+    addAndMakeVisible(mTextEditor);
+
     //-------- Set size and limits.
    
     const auto minWidth = 500.f;
@@ -43,16 +50,17 @@ ResizablePluginAudioProcessorEditor::~ResizablePluginAudioProcessorEditor()
 //==============================================================================
 void ResizablePluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void ResizablePluginAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+    
+    mNumberOfCallsToResized++;
+
+    mTextEditor.setBounds(getLocalBounds());
+    mTextEditor.insertTextAtCaret("Calls to resized(): " + String(mNumberOfCallsToResized) 
+        + ", approximateScaleFactor = " + String(getApproximateScaleFactorForComponent(this)));
+    mTextEditor.insertTextAtCaret("\n");
 }
